@@ -10,7 +10,7 @@ As robotics systems evolve, the need to integrate real-time capabilities with sc
 My name is Andrei Kholodnyi, I'm a Principal Technologist at the Office of the CTO, Wind River. I’ve ported [ROS 2 to VxWorks](https://github.com/Wind-River/vxworks7-ros2-build) and a co-chair the [ROS 2 Real-Time Working Group](https://github.com/ros-realtime). At [ROSCon 2025](https://roscon.ros.org/2025/), I’d like to talk about ROS 2, [real-time containers](https://www.windriver.com/containers), and Kubernetes.
 
 
-## Demo
+## 🚀 Demo: ROS 2 Communication Across Linux and VxWorks Nodes in Kubernetes
 
 ```mermaid
 flowchart TB
@@ -63,3 +63,31 @@ Bridge --> QEMU_Sub_Core
 classDef master fill:#f9f,stroke:#333,stroke-width:2px,color:#000
 class MinikubeVM master
 ```
+
+This demo showcases a **hybrid system** where ROS 2 nodes running on Linux Docker containers communicate with ROS 2 nodes running on VxWorks inside QEMU virtual machines, all orchestrated via Kubernetes.
+
+---
+
+## 🖥️ Components
+
+- **🖥️ Host Machine:** Linux with Docker, providing networking and Minikube bridge.  
+- **☁️ Minikube VM:** Kubernetes master node managing pods for Linux and VxWorks ROS2 nodes.  
+- **🐧 Linux ROS 2 Nodes:** Publisher and subscriber running in standard Docker containers.  
+- **⚡ VxWorks ROS 2 Nodes:** Publisher and subscriber running in QEMU VMs, each with `vxkubelet` and a ROS 2 container.  
+
+---
+
+## ✨ Key Highlights
+
+- 🔗 Multi-OS ROS 2 communication through a shared Minikube network.  
+- ⏱️ Integration of real-time VxWorks systems with standard Linux containers.  
+- 📦 Fully containerized and orchestrated using Kubernetes manifests.  
+- 🛠️ Designed for testing, simulation, and demonstration of cross-platform ROS 2 messaging.  
+
+---
+
+## 🔄 Flow
+
+1. 🐧 Linux ROS 2 publisher sends messages via the Minikube network.  
+2. ⚡ VxWorks subscriber receives messages in its QEMU VM.  
+3. ⚡ VxWorks publisher can send messages back to Linux subscriber, completing the round-trip communication.  
