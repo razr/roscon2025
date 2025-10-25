@@ -82,9 +82,67 @@ buildah push publisher_lambda oci-archive:publisher_lambda.oci
 buildah push publisher_lambda oci-archive:subscriber_lambda.oci
 ```
 
-Import it later:
 
-buildah pull oci-archive:publisher_lambda.oci
+## 🏃 Running `subscriber_lambda` from OCI Archive
+
+1. **Copy the OCI archive into an OCI layout directory**  
+
+Use `skopeo` to convert the OCI archive into a directory layout that VxWorks can use:
+
+```bash
+skopeo copy oci-archive:subscriber_lambda.oci oci:./subscriber_lambda:latest
+```
+
+After this, `./subscriber_lambda/` will contain:
+
+```bash
+blobs/
+index.json
+oci-layout
+```
+
+2. Run VxWorks in QEMU
+
+Launch your VxWorks image with QEMU and mount the current directory as a USB storage device:
+
+```bash
+sudo qemu-system-x86_64 \
+  -machine q35 -cpu Nehalem -smp 8 -m 2G \
+  -kernel itl_generic_vip/default/vxWorks \
+  -net nic -net tap,ifname=tap0,script=no \
+  -display none -serial mon:stdio \
+  -append "bootline:gei(0,0)host:vxWorks h=192.168.49.1 e=192.168.49.4 g=192.168.49.1 u=vxworks pw=vxTarget" \
+  -usb -device usb-ehci,id=ehci \
+  -device usb-storage,drive=fat32 \
+  -drive file=fat:rw:`pwd`,id=fat32,format=raw,if=none
+```
+The current directory (`pwd`) will appear in VxWorks as `/bd0a/`
+
+You should see:
+
+```bash
+-> cmd
+[vxWorks *]# ls /bd0a/
+subscriber_lambda.oci
+Dockerfile.publisher_lambda
+Dockerfile.subscriber_lambda
+subscriber_lambda
+publisher_lambda.oci
+```
+
+3. Unpack the OCI image inside VxWorks
+
+```bash
+[vxWorks *]# vxc unpack --image /bd0a/subscriber_lambda --rootfs flattened /ram0/bundle
+```
+
+4. Run the container
+
+```bash
+[vxWorks *]# vxc run --detach --bundle /ram0/bundle subscriber_lambda
+```
+
+After this, the `subscriber_lambda` container is running on VxWorks.
 
 ## 🗂️ Files
 
