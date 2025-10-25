@@ -1,13 +1,13 @@
 # 🛠 Demo Setup Instructions
 
-This document describes the **setup required** to run the ⋮⋮⋮ROS 2 + VxWorks demo on an <img src="https://assets.ubuntu.com/v1/29985a98-ubuntu-logo32.png" width="20"/> Ubuntu 22.04 host machine.
+This document describes the **setup required** to run the ⋮⋮⋮ROS 2 <img src="https://www.windriver.com/sites/default/files/2023-08/vxworks.png" width="16"/>VxWorks demo on an Ubuntu 22.04 host machine.
 
 ---
 
 ## 🖥 Host Requirements
 
-- **OS:** Ubuntu 22.04 LTS
-- **Tools:** 🐳Docker, Minikube, QEMU
+- **OS:** <img src="https://assets.ubuntu.com/v1/29985a98-ubuntu-logo32.png" width="16"/> Ubuntu 22.04 LTS
+- **Tools:** 🐳Docker, Minikube, <img src="https://images.icon-icons.com/2699/PNG/512/qemu_logo_icon_169821.png" width="16"/> QEMU
 
 ---
 
@@ -28,7 +28,7 @@ Verify installation:
 docker --version
 ```
 
-2️⃣ Install Minikube
+## 2️⃣ Install Minikube
 
 Follow these steps to install Minikube:
 
@@ -49,7 +49,7 @@ Start Minikube with a bridge network:
 minikube start
 ```
 
-3️⃣ Install QEMU
+## 3️⃣ Install QEMU
 
 Install QEMU to run VxWorks:
 
@@ -64,7 +64,7 @@ Verify installation:
 qemu-system-x86_64 --version
 ```
 
-4️⃣ Network Setup
+## 4️⃣ Network Setup
 
 Two tap interfaces are required for VxWorks to communicate with the host and Minikube network.
 
@@ -79,12 +79,12 @@ sudo ip link set tap1 up
 
 ⚡ Ensure these networks do not conflict with existing host networks.
 
-✅ Summary
+## ✅ Summary
 
 After completing this setup:
 - 🐳Docker is installed and ready for containerized ⋮⋮⋮ROS 2 nodes.
 - Minikube is running for ☸Kubernetes orchestration.
 - QEMU is installed to run VxWorks.
-- `Tap` interfaces are configured for VxWorks VM networking.
+- `tap` interfaces are configured for VxWorks VM networking.
 
 You can now deploy Linux ⋮⋮⋮ROS 2 pods and VxWorks ⋮⋮⋮ROS 2 nodes as described in the demo.
